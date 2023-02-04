@@ -1,4 +1,10 @@
-
+body{
+    margin: 0;
+    font-family: 'Segoe UI';
+}
+.dNone{
+    display: none !important;
+}
 .contentContainer{
     display: flex;
     flex-wrap: wrap;
@@ -18,26 +24,24 @@
     position: relative;
     box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.2);
 }
-
 .pokemonMiniCard:hover {
     box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.4);
     transition: all 125ms ease-in-out;
 }
-
 .pokemonMiniCard img {
     height: 170px;
     z-index: 2;
     transition: 125ms;
     margin-bottom: -15px;
 }
-
 .pokemonMiniCard img:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
     transition: 125ms;
+    z-index: 6;
 }
-
 .pokemonMiniCard h3 {
     color: white;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     background-color: rgba(0, 0, 0, 0.2);
     width: 100%;
     text-align: center;
@@ -47,16 +51,99 @@
     padding: 10px 0;
     border-radius: 10px 10px 0 0;
 }
-
 .pokemonMiniCard b {
     color: white;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     z-index: 1;
     position: absolute;
     top: 50px;
     left: 10px;
 }
-
 h3::first-letter {
     text-transform: capitalize;
 }
-
+.pokeId{
+    color: white;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    position: absolute;
+    left: 10px;
+    top: 35px;
+    font-size: 20px;
+    transform: rotate(-10deg);
+    z-index: 5;    
+}
+.fullscreenView{
+    position: absolute;
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.3);
+    min-height: 100vh;
+    min-width: 100vw;
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.fullScreenContainer{
+    position: relative;
+    background-color: white;
+    height: 700px;
+    width: 400px;
+    box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.4);
+    border-radius: 30px;
+    
+}
+.fullScreenContainer img{
+    height: 250px;
+    position: absolute;
+    top: 35%;
+    margin: -125px;
+    left: 65%;
+    right: 35%;
+}
+.fullscreenBg{
+    height: 350px;
+    border-radius:30px 30px 0 0 ;
+}
+.fullscreenBg h3{
+    color: white;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    font-size: 40px;
+    margin: 0;
+    padding-top: 30px;
+    text-align: center;
+}
+.fullscreenBgbottom{
+    background-color: white;
+    height: 30px;
+    margin-top: -30px;
+    border-radius:30px 30px 0 0 ;
+}
+.pokeIdFull{
+    color: white;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    font-size: 20px;
+    text-align: right;
+    padding-right: 30px;
+}
+.boxForType{
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100px;
+    height: 30px;
+    border-radius: 15px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+}
+.boxForType h3{
+    font-size: 20px;
+    margin: 0;
+    padding: 0;    
+}
+.typeBox{
+    margin-left: 20px;
+}
