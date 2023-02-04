@@ -1,11 +1,12 @@
 body{
     margin: 0;
-    font-family: 'Segoe UI';
+    
 }
 .dNone{
     display: none !important;
 }
 .contentContainer{
+    margin-top: 90px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -13,7 +14,7 @@ body{
 .pokemonMiniCard {
     height: 250px;
     width: 220px;
-    border-radius: 10px;
+    border-radius: 10px 50px;
     margin: 8px;
     cursor: pointer;
     transition: 125ms;
@@ -23,6 +24,7 @@ body{
     justify-content: center;
     position: relative;
     box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.2);
+    background-image: url('img/ball_bg.png');
 }
 .pokemonMiniCard:hover {
     box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.4);
@@ -49,7 +51,7 @@ body{
     top: 0;
     margin: 0;
     padding: 10px 0;
-    border-radius: 10px 10px 0 0;
+    border-radius: 10px 50px 0 0;
 }
 .pokemonMiniCard b {
     color: white;
@@ -92,12 +94,12 @@ h3::first-letter {
     width: 400px;
     box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.4);
     border-radius: 30px;
-    
+    cursor: default ;
 }
 .fullScreenContainer img{
     height: 250px;
     position: absolute;
-    top: 35%;
+    top: 34%;
     margin: -125px;
     left: 65%;
     right: 35%;
@@ -147,3 +149,19 @@ h3::first-letter {
 .typeBox{
     margin-left: 20px;
 }
+.cardMenu{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin-top: 15px;
+}
+.cardMenuText{
+ font-weight: bold;
+ cursor: pointer;
+ color: rgba(0, 0, 0, 0.404);
+}
+.isActiv{
+    color: black;
+    text-decoration: underline overline;    
+}
+
