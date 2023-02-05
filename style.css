@@ -1,6 +1,11 @@
 body{
-    margin: 0;
-    
+    margin: 0;    
+}
+h3::first-letter {
+    text-transform: capitalize;
+}
+h4::first-letter {
+    text-transform: capitalize;
 }
 .dNone{
     display: none !important;
@@ -61,9 +66,6 @@ body{
     top: 50px;
     left: 10px;
 }
-h3::first-letter {
-    text-transform: capitalize;
-}
 .pokeId{
     color: white;
     text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
@@ -77,6 +79,7 @@ h3::first-letter {
 .fullscreenView{
     position: absolute;
     position: fixed;
+    margin-top: -50px;
     background-color: rgba(255, 255, 255, 0.3);
     min-height: 100vh;
     min-width: 100vw;
@@ -93,10 +96,10 @@ h3::first-letter {
     height: 700px;
     width: 400px;
     box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.4);
-    border-radius: 30px;
+    border-radius: 80px 20px;
     cursor: default ;
 }
-.fullScreenContainer img{
+.pokePic{
     height: 250px;
     position: absolute;
     top: 34%;
@@ -106,14 +109,22 @@ h3::first-letter {
 }
 .fullscreenBg{
     height: 350px;
-    border-radius:30px 30px 0 0 ;
+    border-radius:80px 20px 0 0 ;
 }
 .fullscreenBg h3{
     color: white;
     text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
-    font-size: 40px;
-    margin: 0;
+    font-size: 40px;    
     padding-top: 30px;
+    padding-bottom: 10px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 80px 20px 0 0;
+}
+.fullscreenBg h4{
+    color: white;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    font-size: 20px;    
     text-align: center;
 }
 .fullscreenBgbottom{
@@ -135,13 +146,12 @@ h3::first-letter {
     height: 30px;
     border-radius: 15px;
     display: flex;
-    text-align: center;
     justify-content: center;
-    color: rgb(0, 0, 0);
+    align-items: center;
     box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
     margin: 10px;
 }
-.boxForType h3{
+.boxForType h4{
     font-size: 20px;
     margin: 0;
     padding: 0;    
@@ -154,6 +164,14 @@ h3::first-letter {
     width: 100%;
     justify-content: space-evenly;
     margin-top: 15px;
+    align-items: center;
+}
+.cardMenu img{
+    position: unset;
+    height: 35px;
+    margin: 0;
+    cursor: pointer;
+
 }
 .cardMenuText{
  font-weight: bold;
@@ -161,7 +179,15 @@ h3::first-letter {
  color: rgba(0, 0, 0, 0.404);
 }
 .isActiv{
-    color: black;
-    text-decoration: underline overline;    
+    color: black;  
 }
-
+.closeTag{
+    position: absolute;
+    height: 30px ;
+    width: 30px ;
+    z-index: 200;
+    right: 10px ;
+    top: 10px ;
+    cursor: pointer;
+    filter: invert();
+}

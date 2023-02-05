@@ -11,7 +11,7 @@ function fullscreenBg(currentPokemon){
     for (let j = 0; j < types.length; j++) {
         const currentType = types[j];
         document.getElementById('typeBox').innerHTML += /*html*/`
-        <div class="boxForType"><h3>${currentType['type']['name']}</h3></div>
+        <div class="boxForType"><h4>${currentType['type']['name']}</h4></div>
         `;
     }
 }   
