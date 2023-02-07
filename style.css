@@ -163,7 +163,7 @@ h4::first-letter {
     display: flex;
     width: 100%;
     justify-content: space-evenly;
-    margin-top: 15px;
+    margin-top: 5px;
     align-items: center;
 }
 .cardMenu img{
@@ -190,4 +190,7 @@ h4::first-letter {
     top: 10px ;
     cursor: pointer;
     filter: invert();
+}
+.cardMenuContend{
+    margin: 10px;
 }

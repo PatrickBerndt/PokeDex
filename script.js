@@ -1,23 +1,20 @@
 let load = 40;
-let currentPokemon;
 let searchedPokemon = [];
 
-function init(){
-    getPokemons();
-    
-}
+/* initial handshake with the pokemon API */
 
-async function getPokemons(){          
-        let url = `https://pokeapi.co/api/v2/pokemon/?limit=100000&offset=0`;
-        let response = await fetch(url);
-        let respondPokemon = await response.json();
-        let allPokemons = respondPokemon['results']
-        for (let i = 0; i < load; i++) {
-            let thisPokemonUrl = allPokemons[i]['url'];
-            let thisPokemon = await fetch(thisPokemonUrl);
-            currentPokemon = await thisPokemon.json();
-            renderMiniCarts(currentPokemon,i);            
-        }      
+async function init(){          
+    let url = `https://pokeapi.co/api/v2/pokemon/?limit=100000&offset=0`;
+    let response = await fetch(url);
+    let respondPokemon = await response.json();
+    let allPokemon = respondPokemon['results']
+    globalThis.allPokemons= allPokemon;
+    for (let i = 0; i < load; i++) {
+        let thisPokemonUrl = allPokemon[i]['url'];
+        let thisPokemon = await fetch(thisPokemonUrl);
+        let currentPokemon = await thisPokemon.json();
+        renderMiniCarts(currentPokemon,i);            
+    }   
 }
 
 function loadMore(){
@@ -25,6 +22,7 @@ function loadMore(){
     document.getElementById('pokemonNames').innerHTML ='';
     init();
 }
+/* this part renders the mini Carts for the Landing Page  */
 
 function renderMiniCarts(currentPokemon,i){       
        document.getElementById('pokemonNames').innerHTML+=/*html*/`
@@ -39,21 +37,9 @@ function renderMiniCarts(currentPokemon,i){
     addTypeBg(currentPokemon,i);    
 }
 
-function pokeIndexNr(i){    
-    let j = i+1
-    let str = j.toString();
-    while(str.length<4)str = "0"+str;
-    document.getElementById(`pokeId${i}`).innerHTML= `#${str}`;
-   
-}
+/* this part renders the detailview and call the menu function */ 
 
-function pokeIndexNrFull(i){    
-    let str = i.toString();
-    while(str.length<4)str = "0"+str;
-    document.getElementById(`pokeIdFull${i}`).innerHTML= `#${str}`;
-}
-
-function enterFullscreen(currentPokemon,i){
+async function enterFullscreen(currentPokemon,i){
     document.getElementById('fullscreenView').classList.remove('dNone');
     document.getElementById('fullscreenView').innerHTML = /*html*/`
      <div class="fullScreenContainer" id="fullScreenContainer" onclick="event.stopPropagation()">
@@ -71,83 +57,137 @@ function enterFullscreen(currentPokemon,i){
     pokeIndexNrFull(i);
     renderCardMenu(i);
 }
+
+
+/* this part builds the 4 digits long number  */ 
+
+function pokeIndexNr(i){    
+    let j = i+1
+    let str = j.toString();
+    while(str.length<4)str = "0"+str;
+    document.getElementById(`pokeId${i}`).innerHTML= `#${str}`;
+}
+
+function pokeIndexNrFull(i){    
+    let str = i.toString();
+    while(str.length<4)str = "0"+str;
+    document.getElementById(`pokeIdFull${i}`).innerHTML= `#${str}`;
+}
+
+/* switch to previous and next pokemon */
+
 function previous(i){
     callSelection(i-1);
 }
+
 function next(i){
     callSelection(i+1);
 }
+
 async function callSelection(i){
     let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
     let response = await fetch(url);
     let currentPokemon = await response.json();
+    globalThis.currentPokemons = currentPokemon;
+
     enterFullscreen(currentPokemon,i);
 }
+
+/* this part close the fullscreenview */
 
 function closeFullScreen(){
     document.getElementById('fullscreenView').classList.add('dNone');
 }
 
+/* this is the part what renders the lower part of the detail view */
+
 function renderCardMenu(i){
     document.getElementById('fullScreenContainer').innerHTML += /*html*/`
     <div class="cardMenu">
         <div><img src="img/arrow_left.png" onclick="previous(${i})"></div>
-        <div class="cardMenuText isActiv" id="menu1" onclick="contentAbout(${i})">About</div>
-        <div class="cardMenuText" id="menu2" onclick="contentBaseStats(${i})">Base Stats</div>
-        <div class="cardMenuText" id="menu3" onclick="contentEvonution(${i})">Evoluton</div>
+        <div class="cardMenuText" id="menu1" onclick="contentAbout()">About</div>
+        <div class="cardMenuText" id="menu2" onclick="contentBaseStats()">Base Stats</div>
+        <div class="cardMenuText" id="menu3" onclick="contentEvonution()">Evolution</div>
         <div><img src="img/arrow_right.png" onclick="next(${i})"></div>
     </div>
-`;
+    <div class="cardMenuContend" id="cardMenuContend"></div>
+    `;
+    contentBaseStats();
 }
 
-function contentAbout(i){
+function contentAbout(){
     setIsActiv(1);
-    
+    document.getElementById('cardMenuContend').innerHTML='';
+    let height = currentPokemons['height']/10;
+    let weight = currentPokemons['weight']/10;
+
+    document.getElementById('cardMenuContend').innerHTML=/*html*/`
+    <table>
+    <tr>
+        <td>Height:</td>
+        <td>${height}m</td>
+    </tr>
+    <tr>
+        <td>Weight:</td>
+        <td>${weight}kg</td>
+    </tr>
+
+    </table>
+    `; 
 }
 
-function contentBaseStats(i){
+function contentBaseStats(){
     setIsActiv(2);
-    
-
-    document.getElementById('menu2').innerHTML += /*html*/`
-<div class="progress">
-  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-`;
+    let pokemonStat = currentPokemons['stats'];
+    document.getElementById('cardMenuContend').innerHTML='';
+    for (let x = 0; x < pokemonStat.length; x++) {
+       document.getElementById('cardMenuContend').innerHTML += /*html*/`
+        <div class="statBar">
+            <div id="statName">${currentPokemons['stats'][x]['stat']['name']}</div>
+            <div class="progress">
+            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: ${currentPokemons['stats'][x]['base_stat']-15}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="150"></div>
+            </div>
+        </div> 
+        `;
+    }
 }
 
 
 
-function contentEvonution(i){
+function contentEvonution(currentPokemon){
     setIsActiv(3);
-    
-
+    document.getElementById('cardMenuContend').innerHTML='';
+    document.getElementById('cardMenuContend').innerHTML=/*html*/`
+        
+    `;
 }
 
 function setIsActiv(isActiv){
-    document.getElementById('menu3').classList.add('isActiv');
-    document.getElementById('menu1').classList.remove('isActiv');
-    document.getElementById('menu2').classList.remove('isActiv');
-
+    if(isActiv==1){
+        document.getElementById('menu1').classList.add('isActiv');
+        document.getElementById('menu2').classList.remove('isActiv');
+        document.getElementById('menu3').classList.remove('isActiv'); 
+    }else if(isActiv==2){
+        document.getElementById('menu2').classList.add('isActiv');
+        document.getElementById('menu1').classList.remove('isActiv');
+        document.getElementById('menu3').classList.remove('isActiv'); 
+    }else{
+        document.getElementById('menu3').classList.add('isActiv');
+        document.getElementById('menu1').classList.remove('isActiv');
+        document.getElementById('menu2').classList.remove('isActiv'); 
+    }
 }
 
 function getSearchInput() {
     let search = document.getElementById('searchInput').value;
     let searchValue = search.toLocaleLowerCase();
-    loadSearchedPokemon(searchValue);
+    document.getElementById('searchInput').value ='';
+    filterPokemon(searchValue);
 }
 
-async function loadSearchedPokemon(searchValue) {
-    let searchUrl = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
-    let responseSearch = await fetch(searchUrl);
-    let responseAsJsonSearch = await responseSearch.json();
-    filterPokemon(responseAsJsonSearch, searchValue);
-}
-
-
-async function filterPokemon(responseAsJsonSearch, searchValue) {
-    for (let i = 0; i < responseAsJsonSearch['results'].length; i++) {
-        const pokemon = responseAsJsonSearch['results'][i];
+async function filterPokemon(searchValue) {
+    for (let i = 0; i < allPokemons.length; i++) {
+        const pokemon = allPokemons[i];
         let pokemonName = pokemon['name'];
         if (pokemonName.includes(searchValue)) {
             let pokemonResponse = await fetch(pokemon['url']);
@@ -158,15 +198,17 @@ async function filterPokemon(responseAsJsonSearch, searchValue) {
     pokemonSearch();
 }
 
+
 function pokemonSearch() {
     let pokemonContainer = document.getElementById('pokemonNames');
     pokemonContainer.innerHTML = '';
     if (searchedPokemon.length == 0) {
         pokemonContainer.innerHTML = noPokemonFoundTemplate();
     } else {
-        loadedPokemon = searchedPokemon;
-        currentPokemon = 0;
-        renderAllPokemon();
+        for (let i = 0; i < searchedPokemon.length; i++) {
+            let currentPokemons= searchedPokemon[i];
+            renderMiniCarts(currentPokemons,i); 
+        }
     }
 }
 
