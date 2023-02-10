@@ -7,8 +7,16 @@ h3::first-letter {
 h4::first-letter {
     text-transform: capitalize;
 }
+#statName::first-letter{
+    text-transform: capitalize;
+}
 .dNone{
     display: none !important;
+}
+.burgerMenu{
+    height: 40px;
+    cursor: pointer;
+    display:none;
 }
 .contentContainer{
     margin-top: 90px;
@@ -154,7 +162,8 @@ h4::first-letter {
 .boxForType h4{
     font-size: 20px;
     margin: 0;
-    padding: 0;    
+    padding: 0; 
+       
 }
 .typeBox{
     margin-left: 20px;
@@ -194,3 +203,78 @@ h4::first-letter {
 .cardMenuContend{
     margin: 10px;
 }
+.logoHeader{
+    cursor: pointer;
+}
+
+@media(max-width: 500px){
+    .fullScreenContainer{
+       width: 100%;
+       height: 80vh ;
+       border-radius: 0;
+    }
+    .burgerMenu{
+        display: unset;
+        position: absolute;
+        right: 10px;
+        top: 15px;
+    }
+    .dUnset{
+        display: flex !important;
+        justify-content: flex-end !important;
+    }
+    #searchButton{
+        display: none;
+    }
+    #searchInput{
+        display: none;
+    }
+
+    .pokeIdFull{
+        position: absolute;
+        top: 60px;
+        right: 0px;
+        transform: rotate(15deg);
+        z-index: 100;
+    }
+
+    .pokePic{
+        height: 200px;
+        left: 75%;
+        right: 25%;
+        top: 27%;
+    }
+    .contentContainer{
+        flex-direction: column;
+    }
+    .pokemonMiniCard{
+        margin:5px 0;
+        border-radius: 0;
+        width: 100vw;
+        height: 150px;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+    .pokemonMiniCard img{
+        height: 130px;
+        margin-bottom: 0;
+        margin-right: 50px;
+    }
+    .pokemonMiniCard h3{
+        border-radius: 0;
+    }
+    .fullscreenBg h3{
+        border-radius: 0;
+        padding-top: 15px;
+    }
+    .fullscreenBg{
+        border-radius: 0;
+        height: 280px;
+    }
+    .boxForType{
+        width: 70px;
+    }
+    .boxForType h4{
+        font-size: 15px;
+    }
+}   

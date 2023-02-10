@@ -1,5 +1,5 @@
-function addTypeBg(currentPokemon,i){
-    let id = document.getElementById(`pokemonMiniCard${i}`);
+function addTypeBg(currentPokemon){
+    let id = document.getElementById(`pokemonMiniCard${currentPokemon['id']}`);
     let typ = currentPokemon['types'][0]['type']['name'];
     id.classList.add(`${typ}`);
 }   

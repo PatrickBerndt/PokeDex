@@ -1,40 +1,54 @@
-let load = 40;
+let load = 20;
 let searchedPokemon = [];
+let currentLoad= 0;
 
 /* initial handshake with the pokemon API */
 
 async function init(){          
+    loadPokemon();
+}
+
+async function loadPokemon(){
     let url = `https://pokeapi.co/api/v2/pokemon/?limit=100000&offset=0`;
     let response = await fetch(url);
     let respondPokemon = await response.json();
     let allPokemon = respondPokemon['results']
     globalThis.allPokemons= allPokemon;
-    for (let i = 0; i < load; i++) {
-        let thisPokemonUrl = allPokemon[i]['url'];
+    loadCartContent();
+}
+
+async function loadCartContent(){
+    for (let i = currentLoad; i < load; i++) {
+        currentLoad++;
+        let thisPokemonUrl = allPokemons[i]['url'];
         let thisPokemon = await fetch(thisPokemonUrl);
         let currentPokemon = await thisPokemon.json();
-        renderMiniCarts(currentPokemon,i);            
+        renderMiniCarts(currentPokemon);            
     }   
 }
 
+function burgerMenu(){
+    document.getElementById('searchButton').classList.toggle('dUnset');
+    document.getElementById('searchInput').classList.toggle('dUnset');
+}
+
 function loadMore(){
-    load = load+40;
-    document.getElementById('pokemonNames').innerHTML ='';
-    init();
+    load = load+20;
+    loadCartContent();
 }
 /* this part renders the mini Carts for the Landing Page  */
 
-function renderMiniCarts(currentPokemon,i){       
+function renderMiniCarts(currentPokemon){       
        document.getElementById('pokemonNames').innerHTML+=/*html*/`
-        <div class="pokemonMiniCard" id="pokemonMiniCard${i}" onclick="callSelection(${i+1})">
+        <div class="pokemonMiniCard" id="pokemonMiniCard${currentPokemon['id']}" onclick="callSelection(${currentPokemon['id']})">
             <h3> ${currentPokemon['name']}</h3>
-            <div class="pokeId" id="pokeId${i}"></div>
+            <div class="pokeId" id="pokeId${currentPokemon['id']}"></div>
             <img src="${currentPokemon['sprites']['other']['official-artwork']['front_default']}">
-            <div class="types" id="type${i}">
+            <div class="types" id="type${currentPokemon['id']}">
         </div>
     `;   
-    pokeIndexNr(i);
-    addTypeBg(currentPokemon,i);    
+    pokeIndexNr(currentPokemon['id']);
+    addTypeBg(currentPokemon);    
 }
 
 /* this part renders the detailview and call the menu function */ 
@@ -56,14 +70,14 @@ async function enterFullscreen(currentPokemon,i){
     fullscreenBg(currentPokemon);
     pokeIndexNrFull(i);
     renderCardMenu(i);
+    document.getElementById('body').style = 'overflow: hidden;';
 }
 
 
 /* this part builds the 4 digits long number  */ 
 
-function pokeIndexNr(i){    
-    let j = i+1
-    let str = j.toString();
+function pokeIndexNr(i){   
+    let str = i.toString();
     while(str.length<4)str = "0"+str;
     document.getElementById(`pokeId${i}`).innerHTML= `#${str}`;
 }
@@ -97,6 +111,7 @@ async function callSelection(i){
 
 function closeFullScreen(){
     document.getElementById('fullscreenView').classList.add('dNone');
+    document.getElementById('body').style='';
 }
 
 /* this is the part what renders the lower part of the detail view */
@@ -144,8 +159,8 @@ function contentBaseStats(){
        document.getElementById('cardMenuContend').innerHTML += /*html*/`
         <div class="statBar">
             <div id="statName">${currentPokemons['stats'][x]['stat']['name']}</div>
-            <div class="progress">
-            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: ${currentPokemons['stats'][x]['base_stat']-15}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="150"></div>
+            <div class="progress" style="height: 15px;">
+            <div class="progress-bar" role="progressbar" style="width: ${currentPokemons['stats'][x]['base_stat']-15}%;" aria-valuenow="" aria-valuemin="0" aria-valuemax="100">${currentPokemons['stats'][x]['base_stat']}</div>
             </div>
         </div> 
         `;
@@ -154,7 +169,7 @@ function contentBaseStats(){
 
 
 
-function contentEvonution(currentPokemon){
+function contentEvonution(){
     setIsActiv(3);
     document.getElementById('cardMenuContend').innerHTML='';
     document.getElementById('cardMenuContend').innerHTML=/*html*/`
@@ -205,10 +220,12 @@ function pokemonSearch() {
     if (searchedPokemon.length == 0) {
         pokemonContainer.innerHTML = noPokemonFoundTemplate();
     } else {
+        document.getElementById('pokemonNames').innerHTML ='';
         for (let i = 0; i < searchedPokemon.length; i++) {
             let currentPokemons= searchedPokemon[i];
             renderMiniCarts(currentPokemons,i); 
         }
+        searchedPokemon=[];
     }
 }
 
