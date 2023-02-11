@@ -1,4 +1,4 @@
-let load = 20;
+let load = 30;
 let searchedPokemon = [];
 let currentLoad= 0;
 
@@ -36,6 +36,12 @@ function loadMore(){
     load = load+20;
     loadCartContent();
 }
+
+function toggleBackBtn(){
+    document.getElementById('btnMore').classList.add('dNone');
+    document.getElementById('btnBack').classList.remove('dNone');
+}
+
 /* this part renders the mini Carts for the Landing Page  */
 
 function renderMiniCarts(currentPokemon){       
@@ -46,8 +52,9 @@ function renderMiniCarts(currentPokemon){
             <img src="${currentPokemon['sprites']['other']['official-artwork']['front_default']}">
             <div class="types" id="type${currentPokemon['id']}">
         </div>
-    `;   
-    pokeIndexNr(currentPokemon['id']);
+    `; 
+    document.getElementById(`pokeId${currentPokemon['id']}`).innerHTML= `#${pokeIndexNr(currentPokemon['id'])}`;  
+    
     addTypeBg(currentPokemon);    
 }
 
@@ -67,8 +74,8 @@ async function enterFullscreen(currentPokemon,i){
             <img class="pokePic" src="${currentPokemon['sprites']['other']['official-artwork']['front_default']}">
         </div> 
     `;
+    document.getElementById(`pokeIdFull${currentPokemon['id']}`).innerHTML= `#${pokeIndexNr(currentPokemon['id'])}`;
     fullscreenBg(currentPokemon);
-    pokeIndexNrFull(i);
     renderCardMenu(i);
     document.getElementById('body').style = 'overflow: hidden;';
 }
@@ -79,13 +86,7 @@ async function enterFullscreen(currentPokemon,i){
 function pokeIndexNr(i){   
     let str = i.toString();
     while(str.length<4)str = "0"+str;
-    document.getElementById(`pokeId${i}`).innerHTML= `#${str}`;
-}
-
-function pokeIndexNrFull(i){    
-    let str = i.toString();
-    while(str.length<4)str = "0"+str;
-    document.getElementById(`pokeIdFull${i}`).innerHTML= `#${str}`;
+    return str;
 }
 
 /* switch to previous and next pokemon */
@@ -122,7 +123,7 @@ function renderCardMenu(i){
         <div><img src="img/arrow_left.png" onclick="previous(${i})"></div>
         <div class="cardMenuText" id="menu1" onclick="contentAbout()">About</div>
         <div class="cardMenuText" id="menu2" onclick="contentBaseStats()">Base Stats</div>
-        <div class="cardMenuText" id="menu3" onclick="contentEvonution()">Evolution</div>
+        <div class="cardMenuText" id="menu3" onclick="contentMoves()">Moves</div>
         <div><img src="img/arrow_right.png" onclick="next(${i})"></div>
     </div>
     <div class="cardMenuContend" id="cardMenuContend"></div>
@@ -137,18 +138,39 @@ function contentAbout(){
     let weight = currentPokemons['weight']/10;
 
     document.getElementById('cardMenuContend').innerHTML=/*html*/`
-    <table>
+    <table id="aboutTable">
     <tr>
-        <td>Height:</td>
-        <td>${height}m</td>
+        <td>Height:</td><td>${height}m</td>
     </tr>
     <tr>
-        <td>Weight:</td>
-        <td>${weight}kg</td>
+        <td>Weight:</td><td>${weight}kg</td>
     </tr>
 
     </table>
     `; 
+    fillTableAbility();
+    fillTableItems();
+}
+
+function fillTableAbility(){
+    for (let i = 0; i < currentPokemons['abilities'].length; i++) {
+        const ability = currentPokemons['abilities'][i]['ability']['name'];
+        document.getElementById('aboutTable').innerHTML += /*html*/`
+            <tr>
+                <td>Ability ${i+1} : </td><td>${ability}</td>
+            </tr>
+        `;
+    }
+}
+function fillTableItems(){
+    for (let i = 0; i < currentPokemons['held_items'].length; i++) {
+        const item = currentPokemons['held_items'][i]['item']['name'];
+        document.getElementById('aboutTable').innerHTML += /*html*/`
+            <tr>
+                <td>Held Item ${i+1} : </td><td>${item}</td>
+            </tr>
+        `;
+    }
 }
 
 function contentBaseStats(){
@@ -167,14 +189,15 @@ function contentBaseStats(){
     }
 }
 
-
-
-function contentEvonution(){
+function contentMoves(){
     setIsActiv(3);
     document.getElementById('cardMenuContend').innerHTML='';
-    document.getElementById('cardMenuContend').innerHTML=/*html*/`
-        
-    `;
+    for (let i = 0; i < currentPokemons['moves'].length; i++) {
+        const move = currentPokemons['moves'][i]['move']['name'];
+        document.getElementById('cardMenuContend').innerHTML+=/*html*/`
+            <div class="boxForType">${move}</div>
+        `;
+    }
 }
 
 function setIsActiv(isActiv){
@@ -192,6 +215,8 @@ function setIsActiv(isActiv){
         document.getElementById('menu2').classList.remove('isActiv'); 
     }
 }
+
+/* this part is the search function*/
 
 function getSearchInput() {
     let search = document.getElementById('searchInput').value;
@@ -213,7 +238,6 @@ async function filterPokemon(searchValue) {
     pokemonSearch();
 }
 
-
 function pokemonSearch() {
     let pokemonContainer = document.getElementById('pokemonNames');
     pokemonContainer.innerHTML = '';
@@ -226,6 +250,7 @@ function pokemonSearch() {
             renderMiniCarts(currentPokemons,i); 
         }
         searchedPokemon=[];
+        toggleBackBtn();
     }
 }
 
@@ -233,7 +258,6 @@ function noPokemonFoundTemplate(){
     document.getElementById('pokemonNames').innerHTML ='';
     document.getElementById('pokemonNames').innerHTML =/*html*/`
         <h1>Sorry i could chatch anything</h1>
-        <button class="btn">Back</button>
+        <button class="btn btn-outline-info m-5">Back</button>
     `;
-
 }
